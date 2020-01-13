@@ -31,7 +31,7 @@
               </li>
               <li>
                 <div class="myFont">
-                  我的
+                  <span>我的</span>
                   <img src="~assets/img/xiajiantou.png" class="ci-right" alt="">
                   <div ref="dorpdownLayer" class="dorpdownLayer">
                     <div class="item"><a href="">帮助中心</a></div>
@@ -91,7 +91,7 @@ export default {
     background-color: #ffffff;
     box-shadow: 0 2px 2px 0 #ccc;
   }
-  .headerBox a{
+  .headerBox a,span{
     color: #684029;
   }
   .logo{
@@ -136,7 +136,7 @@ export default {
     background: #ffffff;
     text-align: center;
     box-shadow: 0 0 2px 0 #ccc;
-    border: 1px solid #D5BFA7;
+    border: 1px solid #684029;
     left: -40px;
     display: none;
   }
@@ -156,7 +156,7 @@ export default {
   .myFont .dorpdownLayer{
     padding: 13px 0;
     width: 110px;
-    border: 1px solid #ccc;
+    border: 1px solid #684029;
     left: -40px;
     /* display: block; */
   }

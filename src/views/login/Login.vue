@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div ref="toast" id="toast">请先登录</div>
     <div class="container">
       <div class="wrap">
         <div class="loginArticle">
@@ -14,12 +15,12 @@
             <div class="verification">
               <input id="verification" type="text" placeholder="请输入验证码">
               <div  class="getverification">
-                <span id="getVerification">发送验证码</span>
+                <span id="getVerification" @click="getVerification">发送验证码</span>
               </div>
             </div>
             <span class="errorSpan" id="vSpan" style="color: red;"></span>
             <div class="loginButton">
-              <button type="button" id="login">登录</button>
+              <button type="button" id="login" @click="login">登录</button>
             </div>
           </form>
         </div>
@@ -29,67 +30,102 @@
 </template>
 
 <script>
-import $ from 'jquery'
-$(function(){
-  let telCheck = function (num) {  
-    let reg = /^1[3456789]\d{9}$/;
-    return reg.test(num)
-  }
-  let vCode = 0;
-  let userNumber = 0;
-  $("#getVerification").click(function () { 
-    userNumber = $("#phoneNum").val() 
-    if(telCheck(userNumber)){
-      $(".loginForm>span").text("");
-      $.ajax({
-        type:"GET",
-        url:"api/phone/data",
-        data:{
-          phone : userNumber
-        },
-        success:function (data) {
-          vCode = data.data;
-          console.log(vCode);
-        }
-      })
-    }else{
-      $("#phoneSpan").text("电话号码错误！");
-    }
-  })
-  $('#login').click(function(){
-    let phoneNum = $("#phoneNum").val()
-    let verification=$("#verification").val();
-    if(telCheck(phoneNum) && phoneNum == userNumber && verification == vCode){
-      $("#vSpan").text("");
-      $.ajax({
-        url:'api/phone/check',
-        method:'GET',
-        data:{
-          phoneNum,
-          verification
-        },
-        success:function(data){
-          sessionStorage.setItem('logined','true');
-          $(location).attr("href",'/');
-        }
-      })
-    }else{
-      $("#vSpan").text("验证码错误！");
-    }
-  })
-})
+import axios from 'axios';
+import $ from 'jquery';
+import {mapMutations} from 'vuex';
 export default {
   data () {
     return {
+      userNumber:0,
+      vCode:0,
+      a:123
     }
   },
   methods: {
-    
+    ...mapMutations([
+      'SET_LOGIN',
+      'SET_SHOWTOAST'
+    ]),
+    telCheck(num){
+      let reg = /^1[3456789]\d{9}$/;
+      return reg.test(num)
+    },
+    getVerification(){
+      this.userNumber = $("#phoneNum").val() 
+      if(this.telCheck(this.userNumber)){
+        $(".loginForm>span").text("");
+        axios({
+          type:"GET",
+          url:"/api/phone/data?phone="+this.userNumber,
+        }).then((data)=>{
+          this.vCode = data.data.data;
+          console.log(this.vCode);
+        })
+      }else{
+        $("#phoneSpan").text("电话号码错误！");
+      }
+    },
+    login(){
+      // debugger;
+      let phoneNum = $("#phoneNum").val()
+      let verification=$("#verification").val();
+      if(this.telCheck(phoneNum) && phoneNum == this.userNumber && verification == this.vCode){
+        $("#vSpan").text("");
+        axios({
+          url:'api/phone/check?phoneNum='+phoneNum+'&verification='+verification,
+          method:'GET',
+        }).then((data)=>{
+          this.SET_LOGIN({val:true});
+          $(location).attr("href",'/');
+        })
+      }else{
+        $("#vSpan").text("验证码错误！");
+      }
+    }
   },
+  mounted () {
+    if(this.$store.state.showToast){
+      this.$refs.toast.className='toast';
+      setTimeout(()=>{
+        this.$refs.toast.className='';
+        this.SET_SHOWTOAST(false);
+      },3000);
+    }
+  }
 }
 
 </script>
 <style scoped>
+  #toast{
+    position: fixed;
+    width: 200px;
+    height: 100px;
+    color: #ffffff;
+    line-height: 100px;
+    background: #2c3e50;
+    border-radius: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 0;
+  }
+  .toast{
+    animation: showtoast 3s linear;
+  }
+  @keyframes showtoast{
+    0%{
+      opacity: 0;
+    }
+    25%{
+      opacity: 1;
+    }
+    75%{
+      opacity: 1;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
   .container{
     background: url(~assets/img/loginbg.jpg) no-repeat 50% 50%;
     width: 100%;

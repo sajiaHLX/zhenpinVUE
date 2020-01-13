@@ -31,7 +31,7 @@
                   <ins>￥84.50</ins>
                   <span>/</span>
                   <del>￥199.00</del>
-                  <a href="#">加入购物车</a>
+                  <a href="#" @click.prevent="addCar">加入购物车</a>
                 </div>
               </div>
             </li>
@@ -52,7 +52,7 @@
                   <ins>￥84.50</ins>
                   <span>/</span>
                   <del>￥199.00</del>
-                  <a href="#">加入购物车</a>
+                  <a href="#" @click.prevent="addCar">加入购物车</a>
                 </div>
               </div>
             </li>
@@ -73,7 +73,7 @@
                   <ins>￥84.50</ins>
                   <span>/</span>
                   <del>￥199.00</del>
-                  <a href="#">加入购物车</a>
+                  <a href="#" @click.prevent="addCar">加入购物车</a>
                 </div>
               </div>
             </li>
@@ -94,7 +94,7 @@
                   <ins>￥84.50</ins>
                   <span>/</span>
                   <del>￥199.00</del>
-                  <a href="#">加入购物车</a>
+                  <a href="#" @click.prevent="addCar">加入购物车</a>
                 </div>
               </div>
             </li>
@@ -121,6 +121,11 @@
         type:String,
         default:'推荐'
       }
+    },
+    methods: {
+      addCar() {
+        
+      },
     },
   }
 </script>

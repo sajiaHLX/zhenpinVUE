@@ -8,7 +8,8 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
   if(to.meta === 'true'){
-    if (!window.sessionStorage.getItem('logined')) {
+    if (!store.getters.getLogin) {
+      store.commit('SET_SHOWTOAST', true)
       next({
         path: '/login'
       })

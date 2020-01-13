@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <H eader></H>
     <router-view/>
     <Footer></Footer>
   </div>
@@ -18,7 +18,9 @@ export default {
   data () {
     return {
     }
-  }
+  },
+  methods: {
+  },
 }
 </script>
 
@@ -30,4 +32,6 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+
 </style>
